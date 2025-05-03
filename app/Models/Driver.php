@@ -17,4 +17,16 @@ class Driver extends Model
         'current_longitude',
         'last_online'
     ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'last_online' => 'datetime',
+        'current_latitude' => 'float',
+        'current_longitude' => 'float'
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
