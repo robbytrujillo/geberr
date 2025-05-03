@@ -35,7 +35,12 @@ class UserResource extends Resource
                     ->password()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('role')
+                Forms\Components\Select::make('role')
+                    ->options([
+                        'admin' => 'Admin',
+                        'customer' => 'Customer',
+                        'driver' => 'Driver',
+                    ])
                     ->required(),
                 Forms\Components\TextInput::make('photo')
                     ->maxLength(255)
