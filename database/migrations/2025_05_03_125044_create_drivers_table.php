@@ -18,7 +18,7 @@ return new class extends Migration
             $table->boolean('is_active')->default('true');
             $table->decimal('current_latitude', 10, 6)->nullable();
             $table->decimal('current_longitude', 10, 6)->nullable();
-
+            $table->timestamp('last_online')->nullable();
             $table->timestamps();
         });
     }
