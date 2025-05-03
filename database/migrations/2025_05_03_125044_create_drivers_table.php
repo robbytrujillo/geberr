@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('current_longitude', 10, 6)->nullable();
             $table->timestamp('last_online')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
