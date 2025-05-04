@@ -32,6 +32,7 @@ return new class extends Migration
                 'cancelled',
             ])->default('finding_driver');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
