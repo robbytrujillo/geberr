@@ -24,7 +24,9 @@ class DriverResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('user_id')
-                    ->relationship('user', 'name')
+                    ->relationship('user', 'name', function ($query) {
+                        return $query->where('role', 'driver');
+                    })
                     ->required(),
                 Forms\Components\TextInput::make('vehicle_number')
                     ->required()
