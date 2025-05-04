@@ -14,7 +14,23 @@ return new class extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('customer_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('driver_id')->nullable()->constrained('users')->cascadeOnDelete();
+            $table->foreignId('driver_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->decimal('latitude_origin', 10, 8);
+            $table->decimal('longitude_origin', 10, 8);
+            $table->string('address_origin');
+            $table->decimal('latitude_destination', 10, 8);
+            $table->decimal('longitude_destination', 10, 8);
+            $table->string('address_destination');
+            $table->decimal('distance', 10, 2);
+            $table->decimal('price', 10, 2);
+            $table->enum('status', [
+                'finding_driver',
+                'driver_pickup',
+                'driver_deliver',
+                'arrived',
+                'paid',
+                'cancelled',
+            ])->default('finding_driver');
             $table->timestamps();
         });
     }
