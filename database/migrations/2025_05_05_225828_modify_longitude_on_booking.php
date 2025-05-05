@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('bookings', function (Blueprint $table) {
-            $table->decimal('longitude_origin', 10, 8)->change();
+            $table->decimal('longitude_origin', 11, 8)->change();
+            $table->decimal('longitude_destination', 11, 8)->change();
         });
     }
 
@@ -22,7 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('bookings', function (Blueprint $table) {
-            //
+            $table->decimal('longitude_origin', 10, 8)->change();
+            $table->decimal('longitude_destination', 10, 8)->change();
         });
     }
 };
