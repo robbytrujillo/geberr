@@ -66,7 +66,7 @@ class UserResource extends Resource
                 // Tables\Columns\TextColumn::make('email_verified_at')
                 //     ->dateTime()
                 //     ->sortable(),
-                Tables\Columns\TextColumn::make('role'),
+                // Tables\Columns\TextColumn::make('role'),
                 Tables\Columns\ImageColumn::make('photo')
                        ->circular(),
                     // ->searchable(),
