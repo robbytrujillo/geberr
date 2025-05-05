@@ -18,7 +18,7 @@ class Booking extends Model
     const STATUS_CANCELED = 'cancelled';
 
     protected $fillable = [
-        'costomer_id',
+        'customer_id',
         'driver_id',
         'latitude_origin',
         'longitude_origin',
@@ -42,7 +42,7 @@ class Booking extends Model
         'time_estimate' => 'integer',
     ];
 
-    protected function customer(): BelongsTo
+    public function customer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'customer_id');
     }
@@ -52,7 +52,7 @@ class Booking extends Model
         return $this->belongsTo(User::class, 'driver_id');
     }
 
-    public function getStatusColorAtribut(): string 
+    public function getStatusColorAtribute(): string 
     {
         return match ($this->status) {
             self::STATUS_FIDING_DRIVER => 'warning',
