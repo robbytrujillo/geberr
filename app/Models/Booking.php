@@ -28,5 +28,6 @@ class Booking extends Model
         'distance',
         'price',
         'status',
+        'time_estimate',
     ];
 }
