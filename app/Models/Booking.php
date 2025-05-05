@@ -52,5 +52,16 @@ class Booking extends Model
         return $this->belongsTo(User::class, 'driver_id');
     }
 
-    
+    public function getStatusColorAtribut(): string 
+    {
+        return match ($this->status) {
+            self::STATUS_FIDING_DRIVER => 'warning',
+            self::STATUS_DRIVER_PICKUP,
+            self::STATUS_DRIVER_DELIVER => 'primary',
+            self::STATUS_ARRIVED,
+            self::STATUS_PAID => 'success',
+            self::STATUS_CANCELED => 'danger',
+            default => 'secondary',
+        };
+    }
 }
