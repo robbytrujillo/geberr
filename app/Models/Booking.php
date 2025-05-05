@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Booking extends Model
 {
@@ -30,4 +31,26 @@ class Booking extends Model
         'status',
         'time_estimate',
     ];
+
+    protected $casts = [
+        'latitude_origin' => 'float',
+        'longitude_origin' => 'float',
+        'latitude_destination' => 'float',
+        'longitude_destination' => 'float',
+        'distance' => 'float',
+        'price' => 'float',
+        'time_estimate' => 'integer',
+    ];
+
+    protected function customer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'customer_id');
+    }
+
+    public function driver(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'driver_id');
+    }
+
+    
 }
