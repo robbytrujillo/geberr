@@ -75,8 +75,11 @@ class BookingResource extends Resource
                 Forms\Components\Select::make('status')
                 ->options([
                     'finding_driver' => 'Finding Driver',
-                    'driver_found' => 'Driver Found',
-                    'driver_declined' => 'Driver Declined',
+                    'driver_pickup' => 'Driver Pickup',
+                    'driver_delived' => 'Driver Delived',
+                    'arrived' => 'Arrived',
+                    'paid' => 'Paid',
+                    'cancelled' => 'Cancelled',
                 ])
                     ->required(),
                 Forms\Components\TextInput::make('time_estimate')
