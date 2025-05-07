@@ -44,9 +44,6 @@ class BookingResource extends Resource
                     })
                     ->nullable()
                     ->label('Driver'),
-                    
-                    // ->relationship('driver', 'name')
-                    // ->default(null),
                 Forms\Components\TextInput::make('latitude_origin')
                     ->required()
                     ->numeric(),
