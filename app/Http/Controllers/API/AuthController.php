@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    // login
+    // Controller login
     public function login() {
         return response()->json([
             'success' => true,
