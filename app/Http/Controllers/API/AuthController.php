@@ -12,6 +12,46 @@ use App\Models\Setting;
 
 class AuthController extends Controller
 {
+    // Controller register  
+    public function register(Request $request) {
+        $validator = Validator::make($request->all(), [
+            /**
+             * @example robby
+            */
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|unique:users',
+            'password' => 'required|string|min:8',
+            // 'role' => 'required|string|in:admin,customer,driver',
+            'whatsapp' => 'required|string',
+        ]);
+
+         if ($validator->fails()) {
+           return response()->json([
+            'success' => false,
+            'message' => 'Validation Error',
+            'data' => ['errors' => $validator->errors()]
+           ], 422);
+       }
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'role' => 'customer',
+            'whatsapp' => $request->whatsapp,
+        ]);
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        $user->token = $token;
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Register Success',
+            'data' =>   $user
+        ]);
+    }
+    
     // Controller login
     public function login(Request $request) {
        $validator = Validator::make($request->all(), [
