@@ -8,13 +8,21 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Auth;
 use App\Models\User;
+use App\Models\Setting;
 
 class AuthController extends Controller
 {
     // Controller login
     public function login(Request $request) {
        $validator = Validator::make($request->all(), [
+           /**
+            * @example driverbobon@geberr.com
+            */
            'email' => 'required|email',
+
+           /**
+            * @example password
+            */
            'password' => 'required',
        ]);
 
@@ -35,10 +43,16 @@ class AuthController extends Controller
        }
 
        $user = User::where('email', $request->email)->firstOrFail();
+       $setting = Setting::getSettings();
 
        $token = $user->createToken('auth_token')->plainTextToken;
 
        $user->token = $token;
+
+       if ($user->role === 'driver') {
+           $user->driver = $user->driver;
+           $user->setting = $setting;
+       }
 
         return response()->json([
             'success' => true,

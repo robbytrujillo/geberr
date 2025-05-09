@@ -15,7 +15,7 @@ class Setting extends Model
     // mendefiniskan variable
     protected $casts = [
         'interval_seconds' => 'integer',
-        'price_per_km' => 'decimal:2'
+        'price_per_km' => 'float'
     ];
 
     protected static function boot () {
