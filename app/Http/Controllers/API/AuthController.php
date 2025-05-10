@@ -113,7 +113,7 @@ class AuthController extends Controller
         ]);
     }
 
-    // logout
+    // Ambil Data
     public function user(Request $request) {
         $user = $request->user();
         if ($user->role === 'driver') {
@@ -124,6 +124,17 @@ class AuthController extends Controller
             'success' => true,
             'message' => 'Berhasil Mendapatkan Data User',
             'data' =>   $user
+        ]);
+    }
+
+    // logout
+    public function logout(Request $request) {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Logout Success',
+            'data' => null
         ]);
     }
 }
