@@ -125,12 +125,5 @@ class AuthController extends Controller
             'message' => 'Berhasil Mendapatkan Data User',
             'data' =>   $user
         ]);
-
-        // $user->tokens()->delete();
-        // return response()->json([
-        //     'success' => true,
-        //     'message' => 'Logout Success',
-        //     'data' =>   $user
-        // ]);
     }
 }
