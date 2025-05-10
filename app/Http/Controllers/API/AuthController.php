@@ -13,6 +13,9 @@ use App\Models\Setting;
 class AuthController extends Controller
 {
     // Controller register  
+    /**
+     * @unauthenticated
+     */
     public function register(Request $request) {
         $validator = Validator::make($request->all(), [
             /**
@@ -64,7 +67,10 @@ class AuthController extends Controller
         ]);
     }
     
-    // Controller login
+    // Controller login  
+    /**
+     * @unauthenticated
+     */
     public function login(Request $request) {
        $validator = Validator::make($request->all(), [
            /**
