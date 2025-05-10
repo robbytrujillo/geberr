@@ -111,6 +111,26 @@ class AuthController extends Controller
             'message' => 'Login Success',
             'data' =>   $user
         ]);
-        
+    }
+
+    // logout
+    public function user(Request $request) {
+        $user = $request->user();
+        if ($user->role === 'driver') {
+            $user->driver = $user->driver;
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Berhasil Mendapatkan Data User',
+            'data' =>   $user
+        ]);
+
+        // $user->tokens()->delete();
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => 'Logout Success',
+        //     'data' =>   $user
+        // ]);
     }
 }
