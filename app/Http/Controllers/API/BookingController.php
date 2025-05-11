@@ -6,10 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
-use Spatie\Color\Distance;
+// use Spatie\Color\Distance;
 use App\Models\Setting;
 use App\Models\Booking;
-use App\Models\User;
+// use App\Models\User;
 
 class BookingController extends Controller
 {
@@ -42,13 +42,44 @@ class BookingController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+           /**
+            * @example -6.313131
+            */
            'latitude_origin' => 'required|numeric|between:-90,90',
+
+           /**
+             * @example 106.313131
+            */
            'longitude_origin' => 'required|numeric|between:-180,180',
+
+           /**
+            * @example Cibubur
+            */
            'address_origin' => 'required|string|max:255',
+
+           /**
+             * @example -6.414141
+            */
            'latitude_destination' => 'required|numeric|between:-90,90',
+
+           /**
+             * @example 106.414141
+            */
            'longitude_destination' => 'required|numeric|between:-180,180',
+
+           /**
+            * @example Margonda
+            */
            'address_destination' => 'required|string|max:255',
+
+           /**
+            * @example 4
+            */
            'distance' => 'required|numeric|min:0',
+
+           /**
+            * @example 300
+            */
            'time_estimate' => 'required|numeric|min:0',
         ]);
 
@@ -68,8 +99,17 @@ class BookingController extends Controller
             ], 403);
         }
 
-        $setting = Setting::getSetting();
-        if ($setting) {
+        // validasi untuk membatasi booking, customer hanya bisa melakukan booking baru jika booking lain statusnya paid atau canceled
+        if (Booking::where('customer_id', auth()->id())->where('status', '!=', 'paid')->where('status', '!=', 'canceled')->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda hanya dapat melakukan booking baru jika booking lain statusnya paid atau canceled',
+                'data' => ['errors' => $validator->errors()]
+            ], 403);
+        }
+
+        $setting = Setting::getSettings();
+        if (!$setting) {
             return response()->json([
                 'success' => false,
                 'message' => 'Setting belum diatur',

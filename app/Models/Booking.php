@@ -64,4 +64,11 @@ class Booking extends Model
             default => 'secondary',
         };
     }
+
+    // check Booking apakah Active atau tidak
+    public static function hasActiveBooking($customerId): bool {
+        return static::where('customer_id', $customerId)
+            ->whereNotIn('status', [self::STATUS_PAID, self::STATUS_CANCELED])
+            ->exists();
+    }
 }
