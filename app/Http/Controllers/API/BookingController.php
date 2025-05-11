@@ -16,8 +16,6 @@ class BookingController extends Controller
     {
        $validator = Validator::make($request->all(), [
            'distance' => 'required|numeric|min:0',
-        //    'weight' => 'required|numeric',
-        //    'courier' => 'required|numeric',
        ]);
        
         if ($validator->fails()) {
@@ -37,4 +35,20 @@ class BookingController extends Controller
         'data' =>   $price
        ]);
     }
+
+    // store booking
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+           'distance' => 'required|numeric|min:0',
+        ]);
+
+        if ($validator->fails()) {
+           return response()->json([
+            'success' => false,
+            'message' => 'Validation Error',
+            'data' => ['errors' => $validator->errors()]
+           ], 422);
+        }
+    } 
 }
