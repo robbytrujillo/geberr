@@ -49,9 +49,17 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
     public function driver() {
         return $this->hasOne(Driver::class);
     }
 
+    // tambahkan function model checkCustomer
+    public function checkCustomer(): bool {
+        return $this->role === 'customer';
+    }
+
+    // tambahkan function model checkDriver
+    public function checkDriver(): bool {
+        return $this->role === 'driver';
+    }
 }
