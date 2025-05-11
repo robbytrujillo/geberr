@@ -71,4 +71,20 @@ class Booking extends Model
             ->whereNotIn('status', [self::STATUS_PAID, self::STATUS_CANCELED])
             ->exists();
     }
+
+    // mendapatkan booking yang masih aktif
+    public static function getActiveBooking($userId, $role): ?Booking {
+        $query = self::query();
+
+        if ($role === 'customer') {
+            $query->where('customer_id', $userId);
+        } else if ($role === 'driver') {
+            $query->where('driver_id', $userId);
+        }
+
+        return $query->whereNotIn('status', [
+            self::STATUS_PAID, 
+            self::STATUS_CANCELED
+        ])->first();
+    }
 }

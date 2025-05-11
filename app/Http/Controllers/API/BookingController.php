@@ -100,14 +100,17 @@ class BookingController extends Controller
         }
 
         // validasi untuk membatasi booking, customer hanya bisa melakukan booking baru jika booking lain statusnya paid atau canceled
-        if (Booking::where('customer_id', auth()->id())->where('status', '!=', 'paid')->where('status', '!=', 'canceled')->exists()) {
+        if (Booking::hasActiveBooking(auth()->id())) {
+            $activeBooking = Booking::getActiveBooking(auth()->id(), auth()->user()->role)->load('customer')->load('driver'); // getActiveBooking($userId, 'customer');
             return response()->json([
                 'success' => false,
-                'message' => 'Anda hanya dapat melakukan booking baru jika booking lain statusnya paid atau canceled',
-                'data' => ['errors' => $validator->errors()]
-            ], 403);
+                'message' => 'Anda masih memiliki booking aktif, Selesaikan terlebih dahulu',
+                'data' => [
+                    'active_booking' => $activeBooking
+                ]
+            ], 422);
         }
-
+        
         $setting = Setting::getSettings();
         if (!$setting) {
             return response()->json([
