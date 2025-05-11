@@ -65,7 +65,7 @@ class Booking extends Model
         };
     }
 
-    // check Booking apakah Active atau tidak
+    // check Booking apakah masih Active atau tidak
     public static function hasActiveBooking($customerId): bool {
         return static::where('customer_id', $customerId)
             ->whereNotIn('status', [self::STATUS_PAID, self::STATUS_CANCELED])
