@@ -169,9 +169,9 @@ class BookingController extends Controller
 
         $booking->update(['status' => Booking::STATUS_CANCELED]);
         return response()->json([
-                'success' => true,
-                'message' => 'Booking berhasil dibatalkan',
-                'data' => null
-            ]);
+            'success' => true,
+            'message' => 'Booking berhasil dibatalkan',
+            'data' => null
+        ]);
     }
 }
