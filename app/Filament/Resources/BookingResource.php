@@ -13,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Spatie\Color\Distance;
 
 class BookingResource extends Resource
 {
@@ -73,7 +74,7 @@ class BookingResource extends Resource
                 ->options([
                     'finding_driver' => 'Finding Driver',
                     'driver_pickup' => 'Driver Pickup',
-                    'driver_delived' => 'Driver Delived',
+                    'driver_deliver' => 'Driver Deliver',
                     'arrived' => 'Arrived',
                     'paid' => 'Paid',
                     'cancelled' => 'Cancelled',
@@ -92,7 +93,7 @@ class BookingResource extends Resource
                 Tables\Columns\TextColumn::make('customer.name')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('driver.name')
+                Tables\Columns\TextColumn::make('driver.user.name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('latitude_origin')
@@ -113,11 +114,27 @@ class BookingResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('distance')
                     ->numeric()
+                    ->label('Distance (km)')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('price')
-                    ->money()
+                    ->money('idr')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('status'),
+                Tables\Columns\TextColumn::make('status')->badge()
+                ->color(fn (string $state): string => match ($state) {
+                    // 'draft' => 'gray',
+                    // 'reviewing' => 'warning',
+                    // 'published' => 'success',
+                    // 'rejected' => 'danger',
+
+                    'finding_driver' => 'danger',
+                    'driver_pickup' => 'warning',
+                    'driver_deliver' => 'primary',
+                    'arrived' => 'info',
+                    'paid' => 'success',
+                    'cancelled' => 'gray',
+                })
+                
+                ,
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -132,6 +149,7 @@ class BookingResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('time_estimate')
                     ->numeric()
+                    ->label('Time Estimate (second)')
                     ->sortable(),
             ])
             ->filters([
