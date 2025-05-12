@@ -10,7 +10,7 @@ class Booking extends Model
 {
     use SoftDeletes;
 
-    const STATUS_FIDING_DRIVER = 'finding_driver';
+    const STATUS_FINDING_DRIVER = 'finding_driver';
     const STATUS_DRIVER_PICKUP = 'driver_pickup';
     const STATUS_DRIVER_DELIVER = 'driver_deliver';
     const STATUS_ARRIVED = 'arrived';
@@ -55,7 +55,7 @@ class Booking extends Model
     public function getStatusColorAtribute(): string 
     {
         return match ($this->status) {
-            self::STATUS_FIDING_DRIVER => 'warning',
+            self::STATUS_FINDING_DRIVER => 'warning',
             self::STATUS_DRIVER_PICKUP,
             self::STATUS_DRIVER_DELIVER => 'primary',
             self::STATUS_ARRIVED,
@@ -86,5 +86,9 @@ class Booking extends Model
             self::STATUS_PAID, 
             self::STATUS_CANCELED
         ])->first();
+    }
+
+    public function isFindingDriver(): bool {
+        return $this->status === self::STATUS_FINDING_DRIVER;
     }
 }

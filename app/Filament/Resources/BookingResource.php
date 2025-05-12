@@ -121,20 +121,13 @@ class BookingResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')->badge()
                 ->color(fn (string $state): string => match ($state) {
-                    // 'draft' => 'gray',
-                    // 'reviewing' => 'warning',
-                    // 'published' => 'success',
-                    // 'rejected' => 'danger',
-
                     'finding_driver' => 'danger',
                     'driver_pickup' => 'warning',
                     'driver_deliver' => 'primary',
                     'arrived' => 'info',
                     'paid' => 'success',
                     'cancelled' => 'gray',
-                })
-                
-                ,
+                }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
