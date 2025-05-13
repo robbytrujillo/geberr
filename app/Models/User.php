@@ -69,4 +69,6 @@ class User extends Authenticatable
     public function getPhotoUrlAttribute() {
         return $this->photo ? url('storage/' . $this->photo) : null;
     }
+
+    
 }
