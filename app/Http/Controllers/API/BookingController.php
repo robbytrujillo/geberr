@@ -201,5 +201,19 @@ class BookingController extends Controller
                     return $q->where('status', $request->status);
                 });
                 
+        if (auth()->user()->checkDriver()) {
+            $query->where('driver_id', auth()->user()->driver()->id);
+        } else if (auth()->user()->checkDriver()) {
+            $query->where('customer_id', auth()->user()->id());
+        }
+
+        $bookings = $query->latest()->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Berhasil mendapatkan data booking',
+            'data' => $bookings
+            ]
+        );
     }
 }
