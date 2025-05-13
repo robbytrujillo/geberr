@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\BookingController;
+use App\Http\Controllers\API\SettingController;
 
 Route::post('login', [AuthController::class, 'login'])->name('login');
 
@@ -18,6 +19,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('price-check', [BookingController::class, 'priceCheck']);
         Route::post('/', [BookingController::class, 'store'])->name('booking');
         Route::post('/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
+    });
+
+    Route::prefix('driver')->group(function () {
+        Route::post('settings', [SettingController::class, 'index'])->name('driver.settings');
     });
 });
 
