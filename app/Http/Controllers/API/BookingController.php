@@ -217,4 +217,16 @@ class BookingController extends Controller
             ]
         );
     }
+
+    // get Detail Booking
+    public function show($booking_id) {
+        $booking = Booking::with(['customer', 'driver'])->find($booking_id);
+        if (!$booking) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Booking tidak ditemukan',
+                'data' => null
+            ], 404);
+        }
+    }
 }
