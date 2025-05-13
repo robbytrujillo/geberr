@@ -179,7 +179,7 @@ class BookingController extends Controller
         $validator = Validator::make($request->all(), [
              'start_date' => 'nullable|date_format: Y-m-d',
              'end_date' => 'nullable|date_format: Y-m-d',
-             'status' => 'nullable|in:finding_driver, driver_pickup, driver_deliver, arrived, paid, canceled',
+             'status' => 'nullable|in:finding_driver,driver_pickup,driver_deliver,arrived,paid,canceled',
         ]);
 
         if ($validator->fails()) {
@@ -201,10 +201,11 @@ class BookingController extends Controller
                     return $q->where('status', $request->status);
                 });
                 
+
         if (auth()->user()->checkDriver()) {
-            $query->where('driver_id', auth()->user()->driver()->id);
+            $query->where('driver_id', auth()->user()->driver->id);
         } else if (auth()->user()->checkDriver()) {
-            $query->where('customer_id', auth()->user()->id());
+            $query->where('customer_id', auth()->user()->id);
         }
 
         $bookings = $query->latest()->get();
