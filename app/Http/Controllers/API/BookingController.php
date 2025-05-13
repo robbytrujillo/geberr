@@ -174,4 +174,11 @@ class BookingController extends Controller
             'data' => null
         ]);
     }
+
+    public function getAll(Request $request) {
+        $validator = Validator::make($request->all(), [
+             'start_date' => 'nullable|date_format: Y-m-d',
+             'end_date' => 'nullable|date_format: Y-m-d',
+        ]);
+    }
 }
