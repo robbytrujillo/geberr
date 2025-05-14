@@ -231,13 +231,12 @@ class BookingController extends Controller
 
         $user = auth()->user();
         if (!$user->checkDriver()) {
-            if ($booking->driver_id == $user->driver->id) {
+            if ($booking->driver_id != null && $booking->driver_id != $user->driver->id) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Anda tidak memiliki akses',
                     'data' => null
                 ], 403);
-                
             }
         }
 
