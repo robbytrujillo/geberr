@@ -228,5 +228,33 @@ class BookingController extends Controller
                 'data' => null
             ], 404);
         }
+
+        $user = auth()->user();
+        if (!$user->checkDriver()) {
+            if ($booking->driver_id == $user->driver->id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Anda tidak memiliki akses',
+                    'data' => null
+                ], 403);
+                
+            }
+        }
+
+        if ($user->checkCustomer()) {
+            if ($booking->customer_id != $user->id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Anda tidak memiliki akses',
+                    'data' => null
+                ], 403);
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Berhasil mendapatkan data booking',
+            'data' => $booking
+        ]);
     }
 }

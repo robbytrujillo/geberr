@@ -20,6 +20,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', [BookingController::class, 'store'])->name('booking');
         Route::post('/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
         Route::get('/', [BookingController::class, 'getAll'])->name('bookings');
+        Route::get('/{booking_id}', [BookingController::class, 'show'])->name('booking.show');
     });
 
     Route::prefix('driver')->group(function () {
