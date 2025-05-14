@@ -230,7 +230,7 @@ class BookingController extends Controller
         }
 
         $user = auth()->user();
-        if (!$user->checkDriver()) {
+        if ($user->checkDriver()) {
             if ($booking->driver_id != null && $booking->driver_id != $user->driver->id) {
                 return response()->json([
                     'success' => false,
@@ -255,5 +255,16 @@ class BookingController extends Controller
             'message' => 'Berhasil mendapatkan data booking',
             'data' => $booking
         ]);
+    }
+
+    public function getActiveBooking() {
+        $user = auth()->user();
+
+        // $booking = auth()->user()->booking()->where('status', Booking::STATUS_FINDING_DRIVER)->first();
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => 'Berhasil mendapatkan data booking',
+        //     'data' => $booking
+        // ]);
     }
 }
