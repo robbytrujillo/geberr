@@ -260,6 +260,14 @@ class BookingController extends Controller
     public function getActiveBooking() {
         $user = auth()->user();
 
+        $activeBooking = Booking::getActiveBooking($user->id, $user->role);
+
+        return response()->json([
+            'success' => true,
+            'message' => $activeBooking ? 'Ada Booking Aktif' : 'Tidak Ada Booking Aktif',
+            'data' => $activeBooking
+        ]);
+
         // $booking = auth()->user()->booking()->where('status', Booking::STATUS_FINDING_DRIVER)->first();
         // return response()->json([
         //     'success' => true,
