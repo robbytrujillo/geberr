@@ -30,7 +30,3 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('booking/{booking_id}/accept', [BookingController::class, 'acceptBooking'])->name('driver.booking.accept');
     });
 });
-
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
