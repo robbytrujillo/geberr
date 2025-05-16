@@ -275,4 +275,34 @@ class BookingController extends Controller
         //     'data' => $booking
         // ]);
     }
+
+    // 36 API Accept Booking
+    public function acceptBooking($booking_id) {
+        $booking = Booking::find($booking_id);
+
+        if (!auth()->user()->checkDriver()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Akun Anda bukan driver',
+                'data' => auth()->user()
+            ], 403);
+        }
+        /**
+         * Validasi
+         * 1. Jika driver punya active booking, maka gak bisa accept
+         * 2. Jika booking tidak ada, maka ga bisa accept
+         * 3. Jika booking sudah diambil oleh driver lain, tidak bisa diaccept
+         */
+
+        $booking->update([
+            'driver_id' => auth()->user()->driver->id,
+            'status' => Booking::STATUS_DRIVER_PICKUP
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'messages' => 'Booking berhasil diambil',
+            'data' => $booking
+        ]);
+    }
 }
