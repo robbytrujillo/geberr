@@ -330,4 +330,45 @@ class BookingController extends Controller
             'data' => $booking
         ]);
     }
+
+    // 38 API Update Status Booking
+    public function updateStatus(Request $request, Booking $booking) {
+         if (!auth()->user()->checkDriver()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Akun Anda bukan driver',
+                'data' => auth()->user()
+            ], 403);
+        }
+
+        if (auth()->user()->driver->id !== $booking->driver_id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak memiliki akses',
+                'data' => null
+            ], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|in:driver_deliver,arrived,paid'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation Error',
+                'data' => ['errors' => $validator->errors()]
+            ], 422);
+        }
+
+        $booking->update([
+            'status' => $request->status
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status berhasil diupdate',
+            'data' => $booking->fresh()
+        ]);
+    } 
 }
