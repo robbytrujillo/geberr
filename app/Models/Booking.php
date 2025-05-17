@@ -73,13 +73,13 @@ class Booking extends Model
     }
 
     // mendapatkan booking yang masih aktif
-    public static function getActiveBooking($userId, $role): ?Booking {
+    public static function getActiveBooking($userId, $role, $driverId = null): ?Booking {
         $query = self::query();
 
         if ($role === 'customer') {
             $query->where('customer_id', $userId);
         } else if ($role === 'driver') {
-            $query->where('driver_id', $userId);
+            $query->where('driver_id', $driverId);
         }
 
         return $query->whereNotIn('status', [

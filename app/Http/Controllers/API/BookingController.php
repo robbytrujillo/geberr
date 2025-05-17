@@ -293,6 +293,31 @@ class BookingController extends Controller
          * 2. Jika booking tidak ada, maka ga bisa accept
          * 3. Jika booking sudah diambil oleh driver lain, tidak bisa diaccept
          */
+        
+        // 1
+        if (Booking::getActiveBooking(auth()->user()->id, 'driver', auth()->user()->driver->id)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda masih memiliki booking aktif',
+                'data' => null
+            ], 422);
+        } 
+
+        if (!$booking) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Booking tidak ditemukan',
+                'data' => null
+            ], 404);
+        }
+
+        if ($booking->driver_id !== null) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Booking sudah diambil',
+                'data' => null
+            ], 422);
+        }
 
         $booking->update([
             'driver_id' => auth()->user()->driver->id,
