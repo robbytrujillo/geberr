@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\BookingController;
 use App\Http\Controllers\API\SettingController;
+use App\Http\Controllers\API\DriverTrackingController;
 use App\Models\Booking;
 
 Route::post('login', [AuthController::class, 'login'])->name('login');
@@ -29,5 +30,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('settings', [SettingController::class, 'index'])->name('driver.settings');
         Route::post('booking/{booking_id}/accept', [BookingController::class, 'acceptBooking'])->name('driver.booking.accept');
         Route::put('booking/{booking}/status}', [BookingController::class, 'updateStatus'])->name('driver.booking.status');
+        Route::post('tracking', [DriverTrackingController::class, 'store'])->name('driver.tracking.store');
     });
 });

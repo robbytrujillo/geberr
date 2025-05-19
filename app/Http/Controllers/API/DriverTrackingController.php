@@ -12,17 +12,9 @@ class DriverTrackingController extends Controller
 {
     // Membuat API untuk menyempan data tracking (Booking tracking)
     public function store(Request $request) {
-        if (!auth()->user()->checkDriver()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Akun Anda bukan driver',
-                'data' => auth()->user()
-            ], 403);
-        }
-
         $validator = Validator::make($request->all(), [
             /**
-             * @example -6.313131 description
+             * @example -6.313131
              */
             'latitude' => 'required|numeric|between:-90,90',
             /**
@@ -39,19 +31,27 @@ class DriverTrackingController extends Controller
             ], 422);
         }
 
-        $timestamp = now();
+         if (!auth()->user()->checkDriver()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Akun Anda bukan driver',
+                'data' => auth()->user()
+            ], 403);
+        }
+
+        $timestamps = now();
 
         $driverTracking = DriverTracking::create([
-            'driver_id' => auth()->user()->driver->d,
+            'driver_id' => auth()->user()->driver->id,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
-            'tracked_at' => $timestamp,
+            'tracked_at' => $timestamps
         ]);
 
         $request->user()->driver->update([
             'current_latitude' => $request->latitude,
             'current_longitude' => $request->longitude,
-            'last_online' => $timestamp
+            'last_online' => $timestamps
         ]);
 
         return response()->json([
