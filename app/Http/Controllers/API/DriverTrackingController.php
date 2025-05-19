@@ -10,7 +10,7 @@ use App\Models\DriverTracking;
 
 class DriverTrackingController extends Controller
 {
-    // Booking tracking
+    // Membuat API untuk menyempan data tracking (Booking tracking)
     public function store(Request $request) {
         if (!auth()->user()->checkDriver()) {
             return response()->json([
