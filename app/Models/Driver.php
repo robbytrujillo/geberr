@@ -46,4 +46,18 @@ class Driver extends Model
             get: fn () => $this->user?->name
         );
     }
+
+    protected function email (): Attribute
+    {
+        return Attribute::make (
+            get: fn () => $this->user?->email
+        );
+    }
+    
+    protected function whatsapp (): Attribute
+    {
+        return Attribute::make (
+            get: fn () => $this->user?->whatsapp
+        );
+    }
 }
