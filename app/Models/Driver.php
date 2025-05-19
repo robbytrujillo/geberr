@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+// use Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Driver extends Model
 {
@@ -29,5 +31,19 @@ class Driver extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    protected $appends = [
+        'name',
+        'email',
+        'photo_url',
+        'whatsapp',
+    ];
+
+    protected function name (): Attribute
+    {
+        return Attribute::make (
+            get: fn () => $this->user?->name
+        );
     }
 }
