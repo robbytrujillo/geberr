@@ -177,8 +177,14 @@ class BookingController extends Controller
 
     public function getAll(Request $request) {
         $validator = Validator::make($request->all(), [
-             'start_date' => 'nullable|date_format: Y-m-d',
-             'end_date' => 'nullable|date_format: Y-m-d',
+             /**
+              * @example 2025-05-01
+              */
+             'start_date' => 'nullable|date_format:Y-m-d',
+             /**
+              * @example 2025-05-20
+              */
+             'end_date' => 'nullable|date_format:Y-m-d',
              'status' => 'nullable|in:finding_driver,driver_pickup,driver_deliver,arrived,paid,canceled',
         ]);
 
@@ -192,10 +198,10 @@ class BookingController extends Controller
 
         $query = Booking::with(['customer', 'driver'])
                 ->when($request->filled('start_date'), function ($q) use ($request) {
-                    return $q->whereDate(['created_at', '>=', $request->start_date]);
+                    return $q->whereDate('created_at', '>=', $request->start_date);
                 })
                 ->when($request->filled('end_date'), function ($q) use ($request) {
-                    return $q->whereDate(['created_at', '<=', $request->end_date]);
+                    return $q->whereDate('created_at', '<=', $request->end_date);
                 })
                 ->when($request->filled('status'), function ($q) use ($request) {
                     return $q->where('status', $request->status);
