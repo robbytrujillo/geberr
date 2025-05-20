@@ -36,6 +36,7 @@ class Driver extends Model
     protected $appends = [
         'name',
         'email',
+        'role',
         'photo_url',
         'whatsapp',
     ];
@@ -51,6 +52,20 @@ class Driver extends Model
     {
         return Attribute::make (
             get: fn () => $this->user?->email
+        );
+    }
+   
+    protected function role (): Attribute
+    {
+        return Attribute::make (
+            get: fn () => $this->user?->role
+        );
+    }
+    
+    protected function photoUrl (): Attribute
+    {
+        return Attribute::make (
+            get: fn () => $this->user?->photo_url
         );
     }
     
