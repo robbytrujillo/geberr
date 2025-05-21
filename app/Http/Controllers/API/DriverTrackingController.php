@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use App\Models\DriverTracking;
+use DB;
 
 class DriverTrackingController extends Controller
 {
@@ -42,8 +43,11 @@ class DriverTrackingController extends Controller
 
         $timestamps = now();
 
+        $activeBooking = Booking::getActiveBooking(auth()->user()->id, 'driver', auth()->user()->driver->id);
+
         $driverTracking = DriverTracking::create([
             'driver_id' => auth()->user()->driver->id,
+            'booking_id' => $activeBooking ? $activeBooking->id : null,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
             'tracked_at' => $timestamps
@@ -54,13 +58,41 @@ class DriverTrackingController extends Controller
             'current_longitude' => $request->longitude,
             'last_online' => $timestamps
         ]);
-
-        $activeBooking = Booking::getActiveBooking(auth()->user()->id, 'driver', auth()->user()->driver->id);
-
+        
         $responseData = [
             'tracking' => $driverTracking,
-            'active_booking' => $activeBooking ? $activeBooking->load('customer') : null
+            'active_booking' => $activeBooking ? $activeBooking->load('customer')->load('driver') : null
         ];
+
+        if (!$activeBooking) {
+            $availableBookings = Booking::with('customer')
+                                    ->where('status', Booking::STATUS_FINDING_DRIVER)
+                                    ->where('driver_id')
+                                    ->select([
+                                        'bookings.*',
+                                        DB::raw("(6371 * acos(
+                                            cos(radians(" . $request->latitude . ")) *
+                                            cos(radians(latitude_origin)) *
+                                            cos(radians(longitude_origin) - radians(" . $request->longitude . ")) +
+                                            sin(radians(" . $request->latitude . ")) *
+                                            sin(radians(latitude_origin))
+                                        )) as distance")
+                                    ])
+                                    ->orderBy('created_at', 'desc')
+                                    ->get();
+
+            $responseData['available_booking'] = $availableBookings->map(function ($booking) {
+                return [
+                    'id' => $booking->id,
+                    'customer_name' => $booking->customer->name,
+                    'pickup_address' => $booking->address_origin,
+                    'destination_address' => $booking->address_destination,
+                    'distance_from_driver' => round($booking->distance, 2),
+                    'price' => $booking->price,
+                    'created_at' => $booking->created_at
+                ];
+            });
+        }
 
         return response()->json([
             'success' => true,
