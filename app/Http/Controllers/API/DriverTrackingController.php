@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -54,10 +55,17 @@ class DriverTrackingController extends Controller
             'last_online' => $timestamps
         ]);
 
+        $activeBooking = Booking::getActiveBooking(auth()->user()->id, 'driver', auth()->user()->driver->id);
+
+        $responseData = [
+            'tracking' => $driverTracking,
+            'active_booking' => $activeBooking ? $activeBooking->load('customer') : null
+        ];
+
         return response()->json([
             'success' => true,
             'message' => 'Data berhasil disimpan',
-            'data' =>   $driverTracking
+            'data' =>   $responseData
         ]);
     }
 }
