@@ -33,5 +33,10 @@ class DriverController extends Controller
                 'data' => null
             ], 422);
         }
+
+        $driver->update([
+            'is_active' => !$driver->is_active,
+            'last_online' => now()
+        ]);
     }
 }
