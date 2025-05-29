@@ -38,5 +38,11 @@ class DriverController extends Controller
             'is_active' => !$driver->is_active,
             'last_online' => now()
         ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => $driver->is_active ? 'Driver Aktif' : 'Driver Tidak Aktif',
+            'data' => $driver->load('user')
+        ]);
     }
 }
