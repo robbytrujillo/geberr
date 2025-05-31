@@ -100,4 +100,49 @@ class DriverTrackingController extends Controller
             'data' =>   $responseData
         ]);
     }
+
+    public function getTrackingBookingId($booking_id) {
+        $booking = Booking::with('driver')->findOrFail($booking_id);
+
+        $user = auth()->user();
+        if ($user->checkDriver()) {
+            if ($booking->driver_id != null && $booking->driver_id != $user->driver->id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Anda tidak memiliki akses (driver)',
+                    'data' => null
+                ], 403);
+            }
+        }
+
+        if ($user->checkCustomer()) {
+            if ($booking->customer_id != $user->id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Anda tidak memiliki akses (customer)',
+                    'data' => null
+                ], 403);
+            }
+        }
+
+        $trackings = DriverTracking::where('booking_id', $booking_id)
+                        ->orderBy('tracked_at', 'desc')
+                        ->get();
+
+        $lastTracking = $trackings->first();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data berhasil ditemukan',
+            'data' => [
+                'booking' => $booking,
+                'last_position' => $lastTracking ? [
+                    'latitude' => $lastTracking->latitude,
+                    'longitude' => $lastTracking->longitude,
+                    'tracked_at' => $lastTracking->tracked_at
+                    ] : null,
+                'tracking_history' => $trackings,
+            ]
+        ]);
+    }
 }
