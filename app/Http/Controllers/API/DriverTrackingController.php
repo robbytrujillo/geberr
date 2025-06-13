@@ -145,4 +145,24 @@ class DriverTrackingController extends Controller
             ]
         ]);
     }
+
+    public function latest(Request $request) {
+        $tracking = DriverTracking::where('driver_id', auth()->user()->driver->id)
+                        ->latest('tracked_at')
+                        ->first();
+
+        if (!$tracking) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data tidak ditemukan',
+                'data' => null
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data berhasil ditemukan',
+            'data' => $tracking
+        ]);
+    }
 }
