@@ -47,4 +47,31 @@ class DriverController extends Controller
             'data' => $driver->load('user')
         ]);
     }
+
+    public function todayStats() {
+        if (!auth()->user()->checkDriver()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Akun Anda bukan driver',
+                'data' => null
+            ], 403);
+        }
+
+        $driver = Driver::where('user_id', auth()->user()->id)->first();
+        if (!$driver) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data Driver tidak ditemukan',
+                'data' => null
+            ], 403);
+        }
+
+        $today = now()->format('Y-m-d');
+        $stats = Booking::where('driver_id', $driver->id)->whereDate('created_at', $today)->get();
+        return response()->json([
+            'success' => true,
+            'message' => 'Statistik Hari Ini',
+            'data' => $stats
+        ]);
+    }
 }
