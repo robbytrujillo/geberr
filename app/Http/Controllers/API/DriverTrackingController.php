@@ -146,7 +146,7 @@ class DriverTrackingController extends Controller
         ]);
     }
 
-    public function latest(Request $request) {
+    public function latest() {
         $tracking = DriverTracking::where('driver_id', auth()->user()->driver->id)
                         ->latest('tracked_at')
                         ->first();
