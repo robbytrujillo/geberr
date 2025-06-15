@@ -77,7 +77,12 @@ class Driver extends Model
         );
     }
 
+    // 46
     public function bookings(): HasMany {
-        return $this->hasMany(Booking::class);
+        return $this->hasMany(Booking::class, 'driver_id', 'user_id');
+    }
+
+    public function trackings(): HasMany {
+        return $this->hasMany(DriverTracking::class);
     }
 }
