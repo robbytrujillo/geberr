@@ -35,5 +35,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('driver/toggle-active', [DriverController::class, 'toggleActive'])->name('driver.toggle-active');
         Route::get('tracking/latest', [DriverTrackingController::class, 'latest'])->name('driver.tracking.latest');
         Route::get('tracking/{booking_id}', [DriverTrackingController::class, 'getTrackingBookingId'])->name('driver.tracking');
+        Route::get('driver/today-stats', [DriverController::class, 'todayStats'])->name('driver.today-stats');
     });
 });

@@ -67,11 +67,33 @@ class DriverController extends Controller
         }
 
         $today = now()->format('Y-m-d');
-        $stats = Booking::where('driver_id', $driver->id)->whereDate('created_at', $today)->get();
+
+        $stats = $driver->bookings()
+                    ->whereDate('created_at', $today)
+                    ->where('status', 'paid')
+                    ->selectRaw('COUNT(*) as total_bookings, SUM(price) as total_earnings')
+                    ->first();
+
+        // mendapatkan data booking hari ini
+        $paidBookings = $driver->bookings()
+                            ->with('customer')
+                            ->whereDate('created_at', $today)
+                            ->where('status', 'paid')
+                            ->latest()
+                            ->get();
+
         return response()->json([
             'success' => true,
-            'message' => 'Statistik Hari Ini',
-            'data' => $stats
+            'message' => 'Data ditemukan',
+            'data' => [
+                'driver' => $driver->load('user'),
+                'stats' => [
+                    'total_bookings' => (int) $stats->total_bookings,
+                    'total_earnings' => (float) $stats->total_earnings,
+                    'date' => $today,
+                ],
+                'paid_bookings' => $paidBookings
+            ]
         ]);
     }
 }
