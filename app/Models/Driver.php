@@ -79,7 +79,8 @@ class Driver extends Model
 
     // 46
     public function bookings(): HasMany {
-        return $this->hasMany(Booking::class, 'driver_id', 'user_id');
+        // return $this->hasMany(Booking::class, 'driver_id', 'user_id');
+        return $this->hasMany(Booking::class);
     }
 
     public function trackings(): HasMany {
