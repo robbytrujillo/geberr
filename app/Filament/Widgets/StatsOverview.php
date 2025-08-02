@@ -4,15 +4,18 @@ namespace App\Filament\Widgets;
 
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use App\Models\Driver;
+use App\Models\User;
+use App\Models\Booking;
 
 class StatsOverview extends BaseWidget
 {
     protected function getStats(): array
     {
         return [
-            Stat::make('Unique views', '192.1k'),
-            Stat::make('Bounce rate', '21%'),
-            Stat::make('Average time on page', '3:12'),
+            Stat::make('Driver', Driver::count()),
+            Stat::make('Customer', User::where('role', 'customer')->count()),
+            Stat::make('Success Booking', Booking::where('status', 'paid')->count()),
         ];
     }
 }
